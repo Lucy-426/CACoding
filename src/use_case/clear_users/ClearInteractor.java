@@ -1,6 +1,19 @@
 package use_case.clear_users;
 
-// TODO Complete me
+public class ClearInteractor implements ClearInputBoundary {
+    final ClearUserDataAccessInterface userDataAccessObject;
+    final ClearOutputBoundary userPresenter;
 
-public class ClearInteractor {
+    public ClearInteractor(ClearUserDataAccessInterface clearDataAccessInterface,
+                           ClearOutputBoundary clearOutputBoundary) {
+        this.userDataAccessObject = clearDataAccessInterface;
+        this.userPresenter = clearOutputBoundary;
+    }
+
+    public void execute() {
+        userDataAccessObject.clearUsers();
+
+        ClearOutputData clearOutputData = new ClearOutputData("All Users have been cleared.");
+        userPresenter.prepareSuccessView(clearOutputData);
+    }
 }
