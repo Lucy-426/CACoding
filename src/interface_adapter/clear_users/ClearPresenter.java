@@ -23,7 +23,7 @@ public class ClearPresenter implements ClearOutputBoundary {
     public void prepareSuccessView(ClearOutputData response) {
         // On success, switch to the sign up view.
         SignupState signupState = signupViewModel.getState();
-        signupState.setUsernameError(response.getMessage());
+        signupState.setClearUserMessage(response.getMessage());
         this.signupViewModel.setState(signupState);
         signupViewModel.firePropertyChanged();
 

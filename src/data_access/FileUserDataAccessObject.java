@@ -60,8 +60,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         this.save();
     }
 
-    public void clearUsers() {
-        this.clear();
+    public String clearUsers(){
+        return this.clear();
     }
 
     @Override
@@ -90,8 +90,26 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         }
     }
 
-    private void clear() {
+    private String clear(){
         accounts.clear();
+        String deleted_users = "";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+            String header = reader.readLine();
+
+            // For later: clean this up by creating a new Exception subclass and handling it in the UI.
+            assert header.equals("username,password,creation_time");
+
+            String row;
+            while ((row = reader.readLine()) != null) {
+                String[] col = row.split(",");
+                String username = String.valueOf(col[headers.get("username")]);
+
+                deleted_users += username + "\n";
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         BufferedWriter writer;
         try {
@@ -100,6 +118,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return deleted_users;
     }
 
 
